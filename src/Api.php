@@ -45,6 +45,11 @@ class Api
     const BOT_TOKEN_ENV_NAME = 'TELEGRAM_BOT_TOKEN';
 
     /**
+     * @var string
+     */
+    private $baseBotUrl;
+
+    /**
      * Instantiates a new Telegram super-class object.
      *
      *

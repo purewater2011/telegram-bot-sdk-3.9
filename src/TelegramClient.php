@@ -16,6 +16,8 @@ class TelegramClient
     /** @var string Telegram Bot API URL. */
     const BASE_BOT_URL = 'https://api.telegram.org/bot';
 
+    private $fileUrl = '{BASE_API_URL}/file/bot{TOKEN}/{FILE_PATH}';
+
     /** @var HttpClientInterface|null HTTP Client. */
     protected $httpClientHandler;
 
@@ -97,7 +99,7 @@ class TelegramClient
      */
     public function prepareRequest(TelegramRequest $request): array
     {
-        $url = $this->getBaseBotUrl() . $request->getAccessToken() . '/' . $request->getEndpoint();
+        $url = $this->getBaseBotUrl() .'/bot'. $request->getAccessToken() . '/' . $request->getEndpoint();
 
         return [
             $url,
@@ -143,5 +145,52 @@ class TelegramClient
         }
 
         return ['query' => $request->getParams()];
+    }
+
+    /**
+     * Get File URL.
+     */
+    public function getFileUrl(string $path, TelegramRequest $request): string
+    {
+        return str_replace(
+            ['{BASE_API_URL}', '{TOKEN}', '{FILE_PATH}'],
+            [$this->baseBotUrl, $request->getAccessToken(), $path],
+            $this->fileUrl
+        );
+    }
+
+    /**
+     * Download file from Telegram server for given file path.
+     *
+     * @param  string  $filePath File path on Telegram server.
+     * @param  string  $filename Download path to save file.
+     *
+     * @throws TelegramSDKException
+     */
+    public function download(string $filePath, string $filename, TelegramRequest $request): string
+    {
+        $fileDir = dirname($filename);
+
+        // Ensure dir is created.
+        if (! @mkdir($fileDir, 0755, true) && ! is_dir($fileDir)) {
+            throw TelegramSDKException::fileDownloadFailed('Directory '.$fileDir.' can\'t be created');
+        }
+
+        $response = $this->httpClientHandler
+            ->setTimeOut($request->getTimeOut())
+            ->setConnectTimeOut($request->getConnectTimeOut())
+            ->send(
+                $url = $this->getFileUrl($filePath, $request),
+                $request->getMethod(),
+                $request->getHeaders(),
+                ['sink' => $filename],
+                $request->isAsyncRequest(),
+            );
+
+        if ($response->getStatusCode() !== 200) {
+            throw TelegramSDKException::fileDownloadFailed($response->getReasonPhrase(), $url);
+        }
+
+        return $filename;
     }
 }

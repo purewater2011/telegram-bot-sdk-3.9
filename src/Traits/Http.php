@@ -115,7 +115,9 @@ trait Http
             $filename .= DIRECTORY_SEPARATOR . ($originalFilename ?: basename($file->file_path));
         }
 
-        return $this->getClient()->download($file->file_path, $filename);
+        $telegramRequest = $this->resolveTelegramRequest('GET', '');
+
+        return $this->getClient()->download($file->file_path, $filename, $telegramRequest);
     }
 
     /**
@@ -400,5 +402,13 @@ trait Http
         }
 
         return ['form_params' => $this->replyMarkupToString($params)];
+    }
+
+    public function setBaseBotUrl(string $baseBotUrl): self
+    {
+        $baseBotUrl = str_replace('/bot', '', $baseBotUrl);
+        $this->baseBotUrl = rtrim($baseBotUrl, '/');
+
+        return $this;
     }
 }
