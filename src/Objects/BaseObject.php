@@ -2,8 +2,8 @@
 
 namespace Telegram\Bot\Objects;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
@@ -62,7 +62,7 @@ abstract class BaseObject extends Collection
 
         return $this->items = collect($this->all())
             ->map(function ($value, $key) use ($relations) {
-                if (!$relations->has($key)) {
+                if (! $relations->has($key)) {
                     return $value;
                 }
 

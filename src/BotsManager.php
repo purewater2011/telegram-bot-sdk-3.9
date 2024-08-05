@@ -3,8 +3,8 @@
 namespace Telegram\Bot;
 
 use Illuminate\Contracts\Container\Container;
-use InvalidArgumentException;
 use Illuminate\Support\Arr;
+use InvalidArgumentException;
 
 /**
  * Class BotsManager
@@ -72,7 +72,7 @@ class BotsManager
         $name = $name ?: $this->getDefaultBot();
 
         $bots = $this->getConfig('bots');
-        if (!is_array($config = Arr::get($bots, $name)) && !$config) {
+        if (! is_array($config = Arr::get($bots, $name)) && ! $config) {
             throw new InvalidArgumentException("Bot [$name] not configured.");
         }
 
@@ -92,7 +92,7 @@ class BotsManager
     {
         $name = $name ?: $this->getDefaultBot();
 
-        if (!isset($this->bots[$name])) {
+        if (! isset($this->bots[$name])) {
             $this->bots[$name] = $this->makeBot($name);
         }
 
@@ -243,7 +243,7 @@ class BotsManager
      */
     protected function parseCommands(array $commands)
     {
-        if (!is_array($commands)) {
+        if (! is_array($commands)) {
             return $commands;
         }
 
@@ -256,11 +256,11 @@ class BotsManager
             // and resolve the full class name.
             if (isset($commandGroups[$command])) {
                 $results = array_merge(
-                    $results, $this->parseCommands($commandGroups[$command])
+                    $results,
+                    $this->parseCommands($commandGroups[$command])
                 );
 
                 continue;
-
             }
 
             // If this command is actually a shared command, we'll extract the full
@@ -269,7 +269,7 @@ class BotsManager
                 $command = $sharedCommands[$command];
             }
 
-            if (!in_array($command, $results)) {
+            if (! in_array($command, $results)) {
                 $results[] = $command;
             }
         }
