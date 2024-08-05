@@ -25,13 +25,14 @@ class HelpCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function handle($arguments)
+    public function handle()
     {
         $commands = $this->telegram->getCommands();
 
         $text = '';
         foreach ($commands as $name => $handler) {
-            $text .= sprintf('/%s - %s'.PHP_EOL, $name, $handler->getDescription());
+            /* @var Command $handler */
+            $text .= sprintf('/%s - %s' . PHP_EOL, $name, $handler->getDescription());
         }
 
         $this->replyWithMessage(compact('text'));

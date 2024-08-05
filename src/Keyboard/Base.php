@@ -1,9 +1,17 @@
 <?php
+
 namespace Telegram\Bot\Keyboard;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
+/**
+ * Class Base.
+ *
+ * @template TKey of array-key
+ * @template TValue
+ * @extends Collection<TKey, TValue>
+ */
 class Base extends Collection
 {
     /**
@@ -16,16 +24,12 @@ class Base extends Collection
      */
     public function __call($method, $args)
     {
-        $action = substr($method, 0, 3);
-
-        if ($action !== 'set') {
+        if (! Str::startsWith($method, 'set')) {
             return parent::__call($method, $args);
         }
-
         $property = Str::snake(substr($method, 3));
         $this->items[$property] = $args[0];
 
         return $this;
-
     }
 }

@@ -2,27 +2,24 @@
 
 namespace Telegram\Bot\Answers;
 
-use Telegram\Bot\Api;
+use Telegram\Bot\Traits\Telegram;
 
 /**
- * Class AnswerBus
+ * Class AnswerBus.
  */
 abstract class AnswerBus
 {
-    /**
-     * @var Api
-     */
-    protected $telegram;
+    use Telegram;
 
     /**
      * Handle calls to missing methods.
      *
-     * @param  string $method
-     * @param  array $parameters
-     *
-     * @return mixed
+     * @param string $method
+     * @param array  $parameters
      *
      * @throws \BadMethodCallException
+     *
+     * @return mixed
      */
     public function __call($method, $parameters)
     {
@@ -31,14 +28,6 @@ abstract class AnswerBus
         }
 
         throw new \BadMethodCallException("Method [$method] does not exist.");
-    }
-
-    /**
-     * @return Api
-     */
-    public function getTelegram()
-    {
-        return $this->telegram;
     }
 
     /**
@@ -51,7 +40,7 @@ abstract class AnswerBus
     protected function buildDependencyInjectedAnswer($answerClass)
     {
         // check if the command has a constructor
-        if (!method_exists($answerClass, '__construct')) {
+        if (! method_exists($answerClass, '__construct')) {
             return new $answerClass();
         }
 
@@ -68,7 +57,11 @@ abstract class AnswerBus
         $container = $this->telegram->getContainer();
         $dependencies = [];
         foreach ($params as $param) {
-            $dependencies[] = $container->make($param->getClass()->name);
+            if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+                $dependencies[] = $container->make($param->getType()->getName());
+            } else {
+                $dependencies[] = $container->make($param->getClass()->name);
+            }
         }
 
         // and instantiate the object with dependencies through ReflectionClass
