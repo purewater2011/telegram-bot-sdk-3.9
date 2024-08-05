@@ -3,12 +3,14 @@
 namespace Telegram\Bot;
 
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Support\Str;
 use Telegram\Bot\Commands\CommandBus;
 use Telegram\Bot\Events\EmitsEvents;
 use Telegram\Bot\Events\UpdateWasReceived;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\HttpClients\HttpClientInterface;
+use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Objects\Chat;
 use Telegram\Bot\Objects\ChatMember;
 use Telegram\Bot\Objects\File;
@@ -17,8 +19,6 @@ use Telegram\Bot\Objects\UnknownObject;
 use Telegram\Bot\Objects\Update;
 use Telegram\Bot\Objects\User;
 use Telegram\Bot\Objects\UserProfilePhotos;
-use Telegram\Bot\Keyboard\Keyboard;
-use Illuminate\Support\Str;
 
 /**
  * Class Api.
@@ -97,8 +97,8 @@ class Api
     public function __construct($token = null, $async = false, $httpClientHandler = null)
     {
         $this->accessToken = isset($token) ? $token : getenv(static::BOT_TOKEN_ENV_NAME);
-        if (!$this->accessToken) {
-            throw new TelegramSDKException('Required "token" not supplied in config and could not find fallback environment variable "'.static::BOT_TOKEN_ENV_NAME.'"');
+        if (! $this->accessToken) {
+            throw new TelegramSDKException('Required "token" not supplied in config and could not find fallback environment variable "' . static::BOT_TOKEN_ENV_NAME . '"');
         }
 
         if (isset($async)) {
@@ -677,7 +677,7 @@ class Api
             return true;
         }
 
-        throw new TelegramSDKException('Invalid Action! Accepted value: '.implode(', ', $validActions));
+        throw new TelegramSDKException('Invalid Action! Accepted value: ' . implode(', ', $validActions));
     }
 
     /**
@@ -948,7 +948,6 @@ class Api
         return true;
     }
 
-
     /**
      * Edit text messages sent by the bot or via the bot (for inline bots).
      *
@@ -1209,7 +1208,6 @@ class Api
 
         return collect($response->getResult())
             ->map(function ($data) use ($shouldEmitEvents) {
-
                 $update = new Update($data);
 
                 if ($shouldEmitEvents) {
@@ -1220,7 +1218,6 @@ class Api
             })
             ->all();
     }
-
 
     /**
      * Builds a custom keyboard markup.
@@ -1441,7 +1438,6 @@ class Api
         if ($fileUpload) {
             $params = ['multipart' => $params];
         } else {
-
             if (array_key_exists('reply_markup', $params)) {
                 $params['reply_markup'] = (string)$params['reply_markup'];
             }
@@ -1474,8 +1470,7 @@ class Api
                 return is_null($value);
             })
             ->map(function ($contents, $name) {
-
-                if (!is_resource($contents) && $this->isValidFileOrUrl($name, $contents)) {
+                if (! is_resource($contents) && $this->isValidFileOrUrl($name, $contents)) {
                     $contents = (new InputFile($contents))->open();
                 }
 
@@ -1557,7 +1552,7 @@ class Api
         if ($action === 'get') {
             /* @noinspection PhpUndefinedFunctionInspection */
             $class_name = Str::studly(substr($method, 3));
-            $class = 'Telegram\Bot\Objects\\'.$class_name;
+            $class = 'Telegram\Bot\Objects\\' . $class_name;
             $response = $this->post($method, $arguments[0] ?: []);
 
             if (class_exists($class)) {

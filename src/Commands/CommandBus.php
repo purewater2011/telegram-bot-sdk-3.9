@@ -4,8 +4,8 @@ namespace Telegram\Bot\Commands;
 
 use Telegram\Bot\Answers\AnswerBus;
 use Telegram\Bot\Api;
-use Telegram\Bot\Objects\Update;
 use Telegram\Bot\Exceptions\TelegramSDKException;
+use Telegram\Bot\Objects\Update;
 
 /**
  * Class CommandBus.
@@ -107,8 +107,6 @@ class CommandBus extends AnswerBus
         }
 
         return $this;
-
-
     }
 
     /**
@@ -174,9 +172,9 @@ class CommandBus extends AnswerBus
     protected function handler($message, Update $update)
     {
         $match = $this->parseCommand($message);
-        if (!empty($match)) {
+        if (! empty($match)) {
             $command = strtolower($match[1]); //All commands must be lowercase.
-//            $bot = (!empty($match[2])) ? $match[2] : '';
+            //            $bot = (!empty($match[2])) ? $match[2] : '';
             $arguments = $match[3];
 
             $this->execute($command, $arguments, $update);
@@ -200,7 +198,7 @@ class CommandBus extends AnswerBus
             return $this->commands[$name]->make($this->telegram, $arguments, $message);
         } elseif (array_key_exists($name, $this->commandAliases)) {
             return $this->commandAliases[$name]->make($this->telegram, $arguments, $message);
-        } elseif ($command = collect($this->commands)->filter(function($command) use ($name){
+        } elseif ($command = collect($this->commands)->filter(function ($command) use ($name) {
             return $command instanceof $name;
         })->first()) {
             $command->make($this->telegram, $arguments, $message);
@@ -230,8 +228,7 @@ class CommandBus extends AnswerBus
             }
         }
 
-        if (!($command instanceof CommandInterface)) {
-
+        if (! ($command instanceof CommandInterface)) {
             throw new TelegramSDKException(
                 sprintf(
                     'Command class "%s" should be an instance of "Telegram\Bot\Commands\CommandInterface"',

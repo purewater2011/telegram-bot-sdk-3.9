@@ -40,7 +40,7 @@ class Update extends BaseObject
     {
         return new static($this->last());
     }
-    
+
     /**
      * Determine if the update is of given type
      *
@@ -53,10 +53,10 @@ class Update extends BaseObject
         if ($this->has(strtolower($type))) {
             return true;
         }
-    
+
         return $this->detectType() === $type;
     }
-    
+
     /**
      * Detect type based on properties.
      *
@@ -76,7 +76,7 @@ class Update extends BaseObject
             ->intersect($types)
             ->pop();
     }
-    
+
     /**
      * Get message object (if exists)
      *
@@ -84,8 +84,7 @@ class Update extends BaseObject
      */
     public function getChat()
     {
-        switch ($this->detectType())
-        {
+        switch ($this->detectType()) {
             case 'message':
                 return $this->getMessage()->getChat();
             case 'callback_query':

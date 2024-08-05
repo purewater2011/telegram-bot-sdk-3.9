@@ -1,4 +1,5 @@
 <?php
+
 namespace Telegram\Bot\Objects\InlineQuery;
 
 use BadMethodCallException;
@@ -7,7 +8,6 @@ use Illuminate\Support\Str;
 
 abstract class InlineBaseObject extends Collection
 {
-
     /**
      * Magic method to set properties dynamically.
      *
