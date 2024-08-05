@@ -3,13 +3,13 @@
   "description": "The Unofficial Telegram Bot API PHP SDK",
   "keywords": ["telegram", "telegram bot", "telegram bot api", "telegram sdk", "telegram php", "laravel telegram", "laravel"],
   "type": "library",
-  "homepage": "https://github.com/irazasyed/telegram-bot-sdk",
+  "homepage": "https://github.com/purewater2011/telegram-bot-sdk",
   "license": "BSD-3-Clause",
   "authors": [
     {
       "name": "Syed Irfaq R.",
       "email": "syed+gh@lukonet.com",
-      "homepage": "https://github.com/irazasyed"
+      "homepage": "https://github.com/purewater2011"
     }
   ],
   "require": {
