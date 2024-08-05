@@ -99,7 +99,7 @@ class TelegramClient
      */
     public function prepareRequest(TelegramRequest $request): array
     {
-        $url = $this->getBaseBotUrl() .'/bot'. $request->getAccessToken() . '/' . $request->getEndpoint();
+        $url = $this->getBaseBotUrl() . '/bot' . $request->getAccessToken() . '/' . $request->getEndpoint();
 
         return [
             $url,
@@ -173,7 +173,7 @@ class TelegramClient
 
         // Ensure dir is created.
         if (! @mkdir($fileDir, 0755, true) && ! is_dir($fileDir)) {
-            throw TelegramSDKException::fileDownloadFailed('Directory '.$fileDir.' can\'t be created');
+            throw TelegramSDKException::fileDownloadFailed('Directory ' . $fileDir . ' can\'t be created');
         }
 
         $response = $this->httpClientHandler

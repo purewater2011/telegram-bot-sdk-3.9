@@ -270,21 +270,21 @@ class TelegramApiTest extends TestCase
         $this->assertEquals('Test4', $secondUpdates[1]->message->text);
     }
 
-//    /** @test */
-//    public function it_can_call_a_valid_method_on_the_api()
-//    {
-//        $mock = $this->prophesize(\Telegram\Bot\Api::class);
-//        $mock->getConnectTimeOut()->willReturn(30);
-//        $mock->getCommands()->willReturn([]);
-//
-//        $api = $mock->reveal();
-//        $api->getConnectTimeOut();
-//        $api->getCommands();
-//
-//        $mock->getConnectTimeOut()->shouldHaveBeenCalled();
-//        $mock->getCommands()->shouldNotHaveBeenCalled();
-//
-//    }
+    //    /** @test */
+    //    public function it_can_call_a_valid_method_on_the_api()
+    //    {
+    //        $mock = $this->prophesize(\Telegram\Bot\Api::class);
+    //        $mock->getConnectTimeOut()->willReturn(30);
+    //        $mock->getCommands()->willReturn([]);
+    //
+    //        $api = $mock->reveal();
+    //        $api->getConnectTimeOut();
+    //        $api->getCommands();
+    //
+    //        $mock->getConnectTimeOut()->shouldHaveBeenCalled();
+    //        $mock->getCommands()->shouldNotHaveBeenCalled();
+    //
+    //    }
 
     /**
      * @test
